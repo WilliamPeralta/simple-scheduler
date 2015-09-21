@@ -2,9 +2,40 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>Sample Simple Scheduler</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="application/javascript" src="js/simple-scheduler.js" ></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/simple-scheduler.css">
 </head>
-<body>
 
+<body>
+<div id="calendar">
+</div>
+<script>
+    sScheduler("#calendar",{
+        titles:[
+            {
+                title:"Category 1",
+                key:1,
+                orari:[
+                    {from:"09:00",to:"13:00"},
+                    {from:"14:00",to:"17:00"}
+                ]
+            },
+            {title:"Category 2",key:2},
+            {title:"Category 3",key:3},
+            {title:"Category 4",key:4},
+            {title:"Category 5",key:5}
+        ],
+        source:function(){}, //ajax to get collection
+        celInterval:50, // minutes
+        celHeight:50,// px
+        orari:[
+            {from:"09:00",to:"13:00"},
+            {from:"14:00",to:"17:00"}
+        ]
+    });
+</script>
 </body>
 </html>
