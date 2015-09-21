@@ -18,23 +18,25 @@
     sScheduler("#calendar",{
         titles:[
             {
-                title:"Category 1",
+                title:"Instructor 1",
                 key:1,
                 orari:[
                     {from:"09:00",to:"13:00"},
                     {from:"14:00",to:"17:00"}
                 ]
             },
-            {title:"Category 2",key:2},
-            {title:"Category 3",key:3},
-            {title:"Category 4",key:4},
-            {title:"Category 5",key:5}
+            {title:"Instructor 2",key:2},
+            {title:"Instructor 3",key:3},
+            {title:"Instructor 4",key:4},
+            {title:"Instructor 5",key:5}
         ],
-        source:function(){}, //ajax to get collection
+        source:function(request,callback){
+            $.get("data.json",request,callback);
+        }, //ajax to get collection
         celInterval:50, // minutes
         celHeight:50,// px
         orari:[
-            {from:"09:00",to:"13:00"},
+            {from:"08:00",to:"13:00"},
             {from:"14:00",to:"17:00"}
         ]
     });
