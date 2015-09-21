@@ -1,0 +1,4 @@
+#selectable .ui-selected {
+    background: #f39814 none repeat scroll 0 0;
+    color: white;
+}

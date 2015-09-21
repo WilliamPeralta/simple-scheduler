@@ -3,6 +3,9 @@ sScheduler = function(selector,options){
     var render = function(){
         var html = '<table class="table table-striped">'+renderTitles()+renderBody()+'</table>';
         $(selector).html(html);
+        $( "#selectable" ).selectable({
+            filter:"td"
+        });
     };
     var renderTitles = function(){
         var html = '<thead><tr>';
@@ -14,7 +17,7 @@ sScheduler = function(selector,options){
         return html;
     };
     var renderBody = function(){
-        var html = '<tbody>';
+        var html = '<tbody id="selectable">';
         var intervals = getIntervals();
         for(var i = 0;i<intervals.length;i++){
             html += '<tr>';
