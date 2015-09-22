@@ -32,14 +32,16 @@
             {title:"Instructor 4",key:4},
             {title:"Instructor 5",key:5}
         ],
+        startDate:"2015-09-21",
+        keyName:'id_utente',
         source:function(request,callback){
-            $.get("data.json",request,callback);
+            $.get("data.json",request,callback,"json");
         }, //ajax to get collection
         celInterval:50, // minutes
         celHeight:50,// px
         orari:[
             {from:"08:00",to:"13:00"},
-            {from:"14:00",to:"17:00"}
+            {from:"14:00",to:"22:00"}
         ]
     });
 </script>
