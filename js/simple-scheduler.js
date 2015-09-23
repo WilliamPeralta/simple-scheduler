@@ -41,14 +41,14 @@ var sScheduler = function(selector,options){
             filter:"td.event-container"
         });*/
         getEvents();
-        $(".event-cel").height(options.celHeight);
+        $(".event-cel").height(self.get('celHeight'));
 
 
     };
     var renderTitles = function(){
         var html = '<thead><tr>';
         html += '<th></th>';
-        $.each(options.titles,function(k,v){
+        $.each(self.get('titles'),function(k,v){
             html += '<th>'+ v.title+'</th>';
         });
         html += '</tr></thead>';
@@ -60,7 +60,7 @@ var sScheduler = function(selector,options){
         for(var i = 0;i<intervals.length;i++){
             html += '<tr>';
             html += '<td><small>'+intervals[i].from.format("HH:mm")+" - "+intervals[i].to.format("HH:mm")+'</small></td>';
-            $.each(options.titles,function(k,v){
+            $.each(self.get('titles'),function(k,v){
                 html += '<td class="event-container" data-key="'+ v.key+'" data-from="'+intervals[i].from.format(dateTimeFormat)+'" data-to="'+intervals[i].to.format(dateTimeFormat)+'" ><div class="event-cel">'+ v.title+'</div></td>';
             });
             html += '</tr>';
@@ -70,10 +70,10 @@ var sScheduler = function(selector,options){
     }
     var getIntervals=function(){
         var intervals = [];
-        $.each(options.orari,function(k,v){
-            for (var start = moment(v.from,"HH:mm");start.isBefore(moment(v.to,"HH:mm"));start.add(options.celInterval,'minutes')){
+        $.each(self.get('orari'),function(k,v){
+            for (var start = moment(v.from,"HH:mm");start.isBefore(moment(v.to,"HH:mm"));start.add(self.get('celInterval'),'minutes')){
                 var from = moment(start);
-                var to = moment(start).add(options.celInterval,'minutes');
+                var to = moment(start).add(self.get('celInterval'),'minutes');
                 console.log(from.format("HH:mm")+" "+to.format("HH:mm"));
                 intervals.push({from:from.set({year:self.currentDay.get("year"),month:self.currentDay.get("month"),date:self.currentDay.get("date")}),to:to.set({year:self.currentDay.get("year"),month:self.currentDay.get("month"),date:self.currentDay.get("date")})});
             }
@@ -82,7 +82,7 @@ var sScheduler = function(selector,options){
     }
     var getEvents = function(){
         var request = {from:"2015-09-21 08:00",to:"2015-09-21 22:00"};
-        options.source(request,function(events){
+        self.get('source')(request,function(events){
             //console.log(events);
             for(var i=0;i<events.length;i++){
                 addEvent(events[i]);
@@ -105,7 +105,7 @@ var sScheduler = function(selector,options){
     }
     var addEvent = function(event){
         //prendo tutti td con la key del evento
-        var elementsKey = $(".event-container[data-key="+event[options.keyName]+"]");
+        var elementsKey = $(".event-container[data-key="+event[self.get('keyName')]+"]");
         //comparo la data d'inizio
         elementsKey.each(function(){
             var $this = $(this);
