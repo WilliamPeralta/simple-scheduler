@@ -1,8 +1,39 @@
-
-sScheduler = function(selector,options){
+"use strict";
+var sScheduler = function(selector,options){
     var self = this;
     this.currentDay = moment(options.startDate,"YYYY-MM-DD");
     var dateTimeFormat = "YYYY-MM-DD HH:mm";
+    /**
+     * Default settings
+     */
+    var settings=$.extend({
+        titles:[],
+        startDate:null,//"2015-09-21",
+        keyName:'id',
+        source:function(request,callback){ }, //ajax to get events collection
+        celInterval:50, // minutes
+        celHeight:50,// px
+        orari:[
+            {from:"08:00",to:"13:00"},
+            {from:"14:00",to:"22:00"}
+        ]
+    },options||{});
+    /**
+     * Set settings
+     * @param key
+     * @param value
+     */
+    this.set=function(key,value){
+        settings[key]=value;
+    };
+    /**
+     * Get settings
+     * @param key
+     * @returns {*}
+     */
+    this.get=function(key){
+        return settings[key];
+    };
     var render = function(){
         var html = '<table class="table table-striped sscheduler">'+renderTitles()+renderBody()+'</table>';
         $(selector).html(html);
