@@ -33,12 +33,15 @@
             {title:"Instructor 5",key:5}
         ],
         startDate:"2015-09-21",
+        onDrop:function(){
+            alert("evento cambiato");
+        },
         keyName:'id_utente',
         source:function(request,callback){
             $.get("data.json",request,callback,"json");
         }, //ajax to get collection
         celInterval:50, // minutes
-        celHeight:30,// px
+        celHeight:40,// px
         orari:[
             {from:"08:00",to:"13:00"},
             {from:"13:00",to:"14:00",disabled:true,class:"pausa-pranzo",celInterval:60,celHeight:100},

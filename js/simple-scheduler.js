@@ -15,6 +15,7 @@ var sScheduler = function(selector,options){
         celHeight:50,// px,
         labelsWidth:80,// px,
         draggable:true,
+        onDrop:function(){},
         dropClass:"sscheduler-droppable",
         dropHoverClass:"sscheduler-hover-droppable",
         orari:[
@@ -126,29 +127,39 @@ var sScheduler = function(selector,options){
             for(var i=0;i<events.length;i++){
                 addEvent(events[i]);
             }
-            if(self.get("draggable")){
-                self.bindEvents();
-            }
+            self.bindEvents();
         });
     }
     this.bindEvents = function(){
-        $( ".event" ).draggable({
-            revert:'invalid'
-        });
-        $( ".event-cel:not(.interval-disabled)" ).droppable({
-            accept: ".event",
-            activeClass: self.get("dropClass"),
-            hoverClass:  self.get("dropHoverClass"),
-            drop: function( event, ui ) {
-                var parent = $(ui.draggable).parent().get(0);
-                if(this!=parent){
-                    if($(".event",$(this)).length==0)
-                        $(this).html(ui.draggable);
+        if(self.get("draggable")) {
+            $(".event").draggable({
+                revert: 'invalid'
+            });
+            $(".event-cel:not(.interval-disabled)").droppable({
+                accept: function(e){
+                    if(e.hasClass("event")){
+                        //same container
+                        if(e.parent().get(0)==this){
+                            return false;
+                        }
+                        //container has event
+                        if($(".event", $(this)).length>0){
+                            return false;
+                        }
+                        return true;
+                    }
+                },
+                activeClass: self.get("dropClass"),
+                hoverClass: self.get("dropHoverClass"),
+                drop: function (event, ui) {
+                    //move event to new container
+                    $(this).html(ui.draggable);
+                    $(ui.draggable).css({top: 0, left: 0});
+                    self.get("onDrop")();
                 }
-                $(ui.draggable).css({top:0,left:0})
-            }
-        });
-    }
+            });
+        }
+    };
     var addEvent = function(event){
         //prendo tutti td con la key del evento
         var elementsKey = $(".event-container[data-key="+event[self.get('keyName')]+"]");
