@@ -12,7 +12,10 @@ var sScheduler = function(selector,options){
         keyName:'id',
         source:function(request,callback){ }, //ajax to get events collection
         celInterval:50, // minutes
-        celHeight:50,// px
+        celHeight:50,// px,
+        draggable:true,
+        dropClass:"sscheduler-droppable",
+        dropHoverClass:"sscheduler-hover-droppable",
         orari:[
             {from:"08:00",to:"13:00"},
             {from:"14:00",to:"22:00"}
@@ -35,14 +38,12 @@ var sScheduler = function(selector,options){
         return settings[key];
     };
     var render = function(){
-        var html = '<table class="table table-striped sscheduler">'+renderTitles()+renderBody()+'</table>';
+        var html = '<table class="table table-striped sscheduler table-bordered">'+renderTitles()+renderBody()+'</table>';
         $(selector).html(html);
         /*$( "#selectable" ).selectable({
-            filter:"td.event-container"
-        });*/
+         filter:"td.event-container"
+         });*/
         getEvents();
-        $(".event-cel").height(self.get('celHeight'));
-
 
     };
     var renderTitles = function(){
@@ -56,26 +57,63 @@ var sScheduler = function(selector,options){
     };
     var renderBody = function(){
         var html = '<tbody id="selectable">';
-        var intervals = getIntervals();
+        var intervals = self.getIntervals();
         for(var i = 0;i<intervals.length;i++){
-            html += '<tr>';
-            html += '<td><small>'+intervals[i].from.format("HH:mm")+" - "+intervals[i].to.format("HH:mm")+'</small></td>';
+            var interval = intervals[i];
+            var settings=$.extend({
+                eventClass:"",
+                class:"",
+                celHeight:0,
+                disabled:false,
+            },interval.data||{});
+            //intervals labels
+            html += '<tr class="'+settings.class+'">';
+            html += '<td class="'+interval.data.class+'"><small>'+intervals[i].from.format("HH:mm")+" - "+intervals[i].to.format("HH:mm")+'</small></td>';
+            //intervals cels
+            var event_td_classes = [];
+            event_td_classes.push('event-container');
+            event_td_classes.push(settings.eventClass);
+            var event_cel_classes = ['event-cel'];
+            if(settings.disabled){
+                event_cel_classes.push('interval-disabled');
+            }
+            var event_cel_height=self.get('celHeight');
+            if(settings.celHeight>0){
+                event_cel_height =settings.celHeight;
+            }
             $.each(self.get('titles'),function(k,v){
-                html += '<td class="event-container" data-key="'+ v.key+'" data-from="'+intervals[i].from.format(dateTimeFormat)+'" data-to="'+intervals[i].to.format(dateTimeFormat)+'" ><div class="event-cel">'+ v.title+'</div></td>';
+                html += '<td class="'+event_td_classes.join(" ")+'" data-key="'+ v.key+'" data-from="'+interval.from.format(dateTimeFormat)+'" data-to="'+interval.to.format(dateTimeFormat)+'" >' +
+                    '<div style="height:'+event_cel_height+'px" class="'+event_cel_classes.join(" ")+'">&nbsp</div>' +
+                    '</td>';
             });
             html += '</tr>';
         }
         html += '</tbody>';
         return html;
-    }
-    var getIntervals=function(){
+    };
+    /**
+     * hours range to intervals
+     * @returns {Array}
+     */
+    this.getIntervals=function(){
         var intervals = [];
         $.each(self.get('orari'),function(k,v){
-            for (var start = moment(v.from,"HH:mm");start.isBefore(moment(v.to,"HH:mm"));start.add(self.get('celInterval'),'minutes')){
+            var settings=$.extend({
+                celInterval:0
+            },v||{});
+            var minutesInterval = v.celInterval>0?v.celInterval:self.get('celInterval');
+            for (var start = moment(v.from,"HH:mm");start.isBefore(moment(v.to,"HH:mm"));start.add(minutesInterval,'minutes')){
+
+
+                console.log("minutes:"+minutesInterval);
                 var from = moment(start);
-                var to = moment(start).add(self.get('celInterval'),'minutes');
+                var to = moment(start).add(minutesInterval,'minutes');
                 console.log(from.format("HH:mm")+" "+to.format("HH:mm"));
-                intervals.push({from:from.set({year:self.currentDay.get("year"),month:self.currentDay.get("month"),date:self.currentDay.get("date")}),to:to.set({year:self.currentDay.get("year"),month:self.currentDay.get("month"),date:self.currentDay.get("date")})});
+                intervals.push({
+                    from:from.set({year:self.currentDay.get("year"),month:self.currentDay.get("month"),date:self.currentDay.get("date")}),
+                    to:to.set({year:self.currentDay.get("year"),month:self.currentDay.get("month"),date:self.currentDay.get("date")}),
+                    data:v
+                });
             }
         });
         return intervals;
@@ -87,20 +125,27 @@ var sScheduler = function(selector,options){
             for(var i=0;i<events.length;i++){
                 addEvent(events[i]);
             }
-            $( ".event" ).draggable();
-            $( ".event-cel" ).droppable({
-                accept: ".event",
-                activeClass: "ui-state-hover",
-                hoverClass: "ui-state-active",
-                drop: function( event, ui ) {
-                    var parent = $(ui.draggable).parent().get(0);
-                    if(this!=parent){
-                        if($(".event",$(this)).length==0)
-                            $(this).html(ui.draggable);
-                    }
-                    $(ui.draggable).css({top:0,left:0})
+            if(self.get("draggable")){
+                self.bindEvents();
+            }
+        });
+    }
+    this.bindEvents = function(){
+        $( ".event" ).draggable({
+            revert:'invalid'
+        });
+        $( ".event-cel:not(.interval-disabled)" ).droppable({
+            accept: ".event",
+            activeClass: self.get("dropClass"),
+            hoverClass:  self.get("dropHoverClass"),
+            drop: function( event, ui ) {
+                var parent = $(ui.draggable).parent().get(0);
+                if(this!=parent){
+                    if($(".event",$(this)).length==0)
+                        $(this).html(ui.draggable);
                 }
-            });
+                $(ui.draggable).css({top:0,left:0})
+            }
         });
     }
     var addEvent = function(event){

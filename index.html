@@ -17,7 +17,7 @@
 <div id="calendar">
 </div>
 <script>
-    sScheduler("#calendar",{
+    scheduler = new sScheduler("#calendar",{
         titles:[
             {
                 title:"Instructor 1",
@@ -41,6 +41,7 @@
         celHeight:50,// px
         orari:[
             {from:"08:00",to:"13:00"},
+            {from:"13:00",to:"14:00",disabled:true,class:"pausa-pranzo",celInterval:60,celHeight:100},
             {from:"14:00",to:"22:00"}
         ]
     });

@@ -25,3 +25,24 @@
 .event-draw{
     padding: 5px;
 }
+
+.sscheduler-droppable{
+    background-color: #e7fff5;
+}
+
+.sscheduler-hover-droppable{
+    background-color: #d0e9df;
+}
+
+.pausa-pranzo{
+    background:repeating-linear-gradient(
+            45deg,
+            #fff,
+            #fff 10px,
+            #f8f8f8 10px,
+            #f8f8f8 20px
+    )
+}
+.pausa-pranzo td{
+    border: 0px !important;
+}
