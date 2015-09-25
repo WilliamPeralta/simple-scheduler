@@ -13,6 +13,7 @@ var sScheduler = function(selector,options){
         source:function(request,callback){ }, //ajax to get events collection
         celInterval:50, // minutes
         celHeight:50,// px,
+        labelsWidth:80,// px,
         draggable:true,
         dropClass:"sscheduler-droppable",
         dropHoverClass:"sscheduler-hover-droppable",
@@ -48,7 +49,7 @@ var sScheduler = function(selector,options){
     };
     var renderTitles = function(){
         var html = '<thead><tr>';
-        html += '<th></th>';
+        html += '<th style="width:'+self.get('labelsWidth')+'px"></th>';
         $.each(self.get('titles'),function(k,v){
             html += '<th>'+ v.title+'</th>';
         });
