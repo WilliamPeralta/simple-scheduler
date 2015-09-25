@@ -160,7 +160,12 @@ var sScheduler = function(selector,options){
             var mstart =moment(event.start);
             var mend =moment(event.end);
             if(mstart.isBetween(mfrom,mto)||mstart.isSame(mfrom)){
-                $this.find(".event-cel").html("<div class='event' style='height: "+(mend.diff(mstart,"minutes"))+"px'><div class='event-draw'>"+event.title+"</div></div>");
+                var event_cel_height=self.get('celHeight');
+                var event_cel_interval=self.get('celInterval');
+                var duration_min = mend.diff(mstart,"minutes");
+                var eventHeigth = parseInt(duration_min*event_cel_height/event_cel_interval);
+
+                $this.find(".event-cel").html("<div class='event' style='height: "+(eventHeigth)+"px'><div class='event-draw'>"+event.title+"</div></div>");
                 return false;
             }else{
                 console.log(mstart.format(dateTimeFormat)+" "+mfrom.format(dateTimeFormat));
