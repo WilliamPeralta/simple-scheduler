@@ -1,8 +1,8 @@
 "use strict";
 var sScheduler = function(selector,options){
     var self = this;
-    this.currentDay = moment(options.startDate,"YYYY-MM-DD");
     var dateTimeFormat = "YYYY-MM-DD HH:mm";
+    var dateFormat = "YYYY-MM-DD";
     /**
      * Default settings
      */
@@ -23,6 +23,8 @@ var sScheduler = function(selector,options){
             {from:"14:00",to:"22:00"}
         ]
     },options||{});
+    this.currentDay = moment(settings.startDate,dateFormat);
+
     /**
      * Set settings
      * @param key
@@ -39,18 +41,18 @@ var sScheduler = function(selector,options){
     this.get=function(key){
         return settings[key];
     };
-    var render = function(){
+    this.render = function(){
         var html = '<table class="table table-striped sscheduler table-bordered">'+renderTitles()+renderBody()+'</table>';
         $(selector).html(html);
-        /*$( "#selectable" ).selectable({
-         filter:"td.event-container"
-         });*/
-        getEvents();
-
+        $( ".sscheduler-datepicker" ).datepicker({
+            dateFormat:"yy-mm-dd"
+        }).on("change",function(){
+            self.setDate($(this).val());
+        });
     };
     var renderTitles = function(){
         var html = '<thead><tr>';
-        html += '<th style="width:'+self.get('labelsWidth')+'px"></th>';
+        html += '<th style="width:'+self.get('labelsWidth')+'px"><input type="text" class="sscheduler-datepicker" value="'+self.currentDay.format(dateFormat)+'"></th>';
         $.each(self.get('titles'),function(k,v){
             html += '<th>'+ v.title+'</th>';
         });
@@ -93,6 +95,12 @@ var sScheduler = function(selector,options){
         html += '</tbody>';
         return html;
     };
+    this.setDate = function(date){
+        console.log(date);
+        this.currentDay = moment(date,dateFormat);
+        self.render();
+        self.getEvents();
+    };
     /**
      * hours range to intervals
      * @returns {Array}
@@ -119,9 +127,12 @@ var sScheduler = function(selector,options){
             }
         });
         return intervals;
-    }
-    var getEvents = function(){
-        var request = {from:"2015-09-21 08:00",to:"2015-09-21 22:00"};
+    };
+    /**
+     * get remote events as json object
+     */
+    this.getEvents = function(){
+        var request = {from:self.currentDay.format(dateFormat),to:self.currentDay.format(dateFormat)};
         self.get('source')(request,function(events){
             //console.log(events);
             for(var i=0;i<events.length;i++){
@@ -129,7 +140,10 @@ var sScheduler = function(selector,options){
             }
             self.bindEvents();
         });
-    }
+    };
+    /**
+     * bind events after render
+     */
     this.bindEvents = function(){
         if(self.get("draggable")) {
             $(".event").draggable({
@@ -184,9 +198,8 @@ var sScheduler = function(selector,options){
         });
     }
     var init=function(){
-
-        render();
+        self.render();
+        self.getEvents();
     }
     init();
-
 };
