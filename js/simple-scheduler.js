@@ -66,14 +66,13 @@ var sScheduler = function(selector,options){
             var interval = intervals[i];
             var settings=$.extend({
                 eventClass:"",
-                orariClass:"",
-                rowClass:"",
+                class:"",
                 celHeight:0,
                 disabled:false,
             },interval.data||{});
             //intervals labels
-            html += '<tr class="'+settings.rowClass+'">';
-            html += '<td class="orari '+interval.data.class+'"><small>'+intervals[i].from.format("HH:mm")+" - "+intervals[i].to.format("HH:mm")+'</small></td>';
+            html += '<tr class="'+settings.class+'">';
+            html += '<td class="orari"><small>'+intervals[i].from.format("HH:mm")+" - "+intervals[i].to.format("HH:mm")+'</small></td>';
             //intervals cels
             var event_td_classes = [];
             event_td_classes.push('event-container');
