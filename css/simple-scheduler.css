@@ -36,18 +36,19 @@
     background-color: #d0e9df;
 }
 
-.pausa-pranzo{
+tr.pausa-pranzo{
     background:repeating-linear-gradient(
             45deg,
             #fff,
             #fff 10px,
             #f8f8f8 10px,
             #f8f8f8 20px
-    )
+    );
 }
 .pausa-pranzo td{
     border: 0px !important;
+    background:none !important;
 }
-.sscheduler-datepicker{
+input.sscheduler-datepicker{
     width: 85px;
 }
