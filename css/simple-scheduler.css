@@ -43,12 +43,12 @@ tr.pausa-pranzo{
             #fff 10px,
             #f8f8f8 10px,
             #f8f8f8 20px
-    );
+    ) !important;
 }
 .pausa-pranzo td{
     border: 0px !important;
     background:none !important;
 }
 input.sscheduler-datepicker{
-    width: 85px;
+    width: 85px !important;
 }
