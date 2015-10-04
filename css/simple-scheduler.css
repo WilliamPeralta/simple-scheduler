@@ -11,6 +11,7 @@
     left: 0px;
     width: 100%;
     z-index: 10;
+    border: 1px solid #f9f9f9;
 
 }
 .sscheduler tbody > tr > td{
@@ -18,13 +19,13 @@
     border-style: dotted;
     vertical-align: middle;
 }
-.event-cel{
+.sscheduler .event-cel{
     overflow: visible;
     position: relative;
     -box-sizing: border-box !important;
     -padding: 5px;
 }
-.event-draw{
+.sscheduler .event-draw{
     padding: 5px;
 }
 
