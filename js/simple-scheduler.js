@@ -42,8 +42,10 @@ var sScheduler = function(selector,options){
         return settings[key];
     };
     this.render = function(){
-        var html = '<table class="table table-striped sscheduler table-bordered">'+renderTitles()+renderBody()+'</table>';
-        $(selector).html(html);
+        var table = $('<table class="table table-striped sscheduler table-bordered">');
+        table.append(renderTitles());
+        table.append(renderBody());
+        $(selector).html(table);
         $( ".sscheduler-datepicker" ).datepicker({
             dateFormat:"yy-mm-dd"
         }).on("change",function(){
@@ -60,7 +62,8 @@ var sScheduler = function(selector,options){
         return html;
     };
     var renderBody = function(){
-        var html = '<tbody id="selectable">';
+        var body = $('<tbody id="selectable">');
+
         var intervals = self.getIntervals();
         for(var i = 0;i<intervals.length;i++){
             var interval = intervals[i];
@@ -71,8 +74,13 @@ var sScheduler = function(selector,options){
                 disabled:false,
             },interval.data||{});
             //intervals labels
-            html += '<tr class="'+settings.class+'">';
-            html += '<td class="orari"><small>'+intervals[i].from.format("HH:mm")+" - "+intervals[i].to.format("HH:mm")+'</small></td>';
+            var row =  $('<tr>');
+            row.addClass(settings.class);
+
+            var callabel = $('<td>');
+            callabel.addClass('orari');
+            callabel.append('<small>'+intervals[i].from.format("HH:mm")+" - "+intervals[i].to.format("HH:mm")+'</small>');
+            row.append(callabel);
             //intervals cels
             var event_td_classes = [];
             event_td_classes.push('event-container');
@@ -85,15 +93,25 @@ var sScheduler = function(selector,options){
             if(settings.celHeight>0){
                 event_cel_height =settings.celHeight;
             }
+
             $.each(self.get('titles'),function(k,v){
-                html += '<td class="'+event_td_classes.join(" ")+'" data-key="'+ v.key+'" data-from="'+interval.from.format(dateTimeFormat)+'" data-to="'+interval.to.format(dateTimeFormat)+'" >' +
-                    '<div style="height:'+event_cel_height+'px" class="'+event_cel_classes.join(" ")+'">&nbsp</div>' +
-                    '</td>';
+                var celevent = $('<td>');
+                celevent.addClass(event_td_classes.join(" "));
+                celevent.attr('data-key',v.key);
+                celevent.data('from',interval.from.format(dateTimeFormat));
+                celevent.data('to',interval.to.format(dateTimeFormat));
+
+                var event = $('<div>');
+                event.height(event_cel_height);
+                event.addClass(event_cel_classes.join(" "));
+
+                celevent.append(event);
+                row.append(celevent);
             });
-            html += '</tr>';
+            body.append(row);
         }
-        html += '</tbody>';
-        return html;
+
+        return body;
     };
     this.setDate = function(date){
         console.log(date);
