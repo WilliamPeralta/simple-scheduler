@@ -210,11 +210,14 @@ var sScheduler = function(selector,options){
         });
     };
     this.renderEvent= function(eventObj){
-        var event = $('<div>');
-        event.addClass("event");
-        event.append('<div class="event-draw">'+eventObj.title+'</div>');
         var mstart =moment(eventObj.start);
         var mend =moment(eventObj.end);
+
+        var event = $('<div>');
+        event.addClass("event");
+        event.append('<div class="event-time-label">'+mstart.format("HH:mm")+' - '+mend.format("HH:mm")+'</div>');
+        event.append('<div class="event-draw">'+eventObj.title+'</div>');
+
         var event_cel_height=self.get('celHeight');
         var event_cel_interval=self.get('celInterval');
         var duration_min = mend.diff(mstart,"minutes");

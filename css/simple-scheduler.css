@@ -1,59 +1,64 @@
 #selectable .ui-selected {
-			background: #f39814 none repeat scroll 0 0;
-			color: white;
-		}
-		.sscheduler .event{
-			background-color: #2c58af;
-			color: #fff;
-			font-size: 12px;
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			width: 100%;
-			z-index: 10;
+    background: #f39814 none repeat scroll 0 0;
+    color: white;
+}
+.sscheduler .event{
+    background-color: #2c58af;
+    color: #fff;
+    font-size: 12px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index: 10;
 
-		}
-		.sscheduler tbody > tr > td{
-			padding: 0px !important;
-			border-style: dotted;
-			vertical-align: middle;
-		}
-		.event-cel{
-			overflow: visible;
-			position: relative;
-			-box-sizing: border-box !important;
-			-padding: 5px;
-		}
-		.event-draw{
-			padding: 5px;
-		}
+}
+.sscheduler tbody > tr > td{
+    padding: 0px !important;
+    border-style: dotted;
+    vertical-align: middle;
+}
+.event-cel{
+    overflow: visible;
+    position: relative;
+    -box-sizing: border-box !important;
+    -padding: 5px;
+}
+.event-draw{
+    padding: 5px;
+}
 
-		.sscheduler-droppable{
-			background-color: #e7fff5;
-		}
+.sscheduler-droppable{
+    background-color: #e7fff5;
+}
 
-		.sscheduler-hover-droppable{
-			background-color: #d0e9df;
-		}
+.sscheduler-hover-droppable{
+    background-color: #d0e9df;
+}
 
-		tr.pausa-pranzo{
-			background:repeating-linear-gradient(
-					45deg,
-					#fff,
-					#fff 10px,
-					#f8f8f8 10px,
-					#f8f8f8 20px
-			) !important;
-		}
-		.pausa-pranzo td{
-			border: 0px !important;
-			background:none !important;
-		}
-		input.sscheduler-datepicker{
-			width: 85px !important;
-			font-size: 13px;
-			border: 1px solid #DDD;
-		}
-		.sscheduler td.orari{
-			text-align: center;
-		}
+tr.pausa-pranzo{
+    background:repeating-linear-gradient(
+            45deg,
+            #fff,
+            #fff 10px,
+            #f8f8f8 10px,
+            #f8f8f8 20px
+    ) !important;
+}
+.pausa-pranzo td{
+    border: 0px !important;
+    background:none !important;
+}
+input.sscheduler-datepicker{
+    width: 85px !important;
+    font-size: 13px;
+    border: 1px solid #DDD;
+}
+.sscheduler td.orari{
+    text-align: center;
+}
+.sscheduler .event-time-label{
+    text-align: center;
+    font-size: 11px;
+    color: #f9f9f9;
+}
