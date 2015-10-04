@@ -201,20 +201,27 @@ var sScheduler = function(selector,options){
             var mfrom = moment($this.data("from"),dateTimeFormat);
             var mto = moment($this.data("to"),dateTimeFormat);
             var mstart =moment(event.start);
-            var mend =moment(event.end);
             if(mstart.isBetween(mfrom,mto)||mstart.isSame(mfrom)){
-                var event_cel_height=self.get('celHeight');
-                var event_cel_interval=self.get('celInterval');
-                var duration_min = mend.diff(mstart,"minutes");
-                var eventHeigth = parseInt(duration_min*event_cel_height/event_cel_interval);
-
-                $this.find(".event-cel").html("<div class='event' style='height: "+(eventHeigth)+"px'><div class='event-draw'>"+event.title+"</div></div>");
+                $this.find(".event-cel").html(self.renderEvent(event));
                 return false;
             }else{
                 console.log(mstart.format(dateTimeFormat)+" "+mfrom.format(dateTimeFormat));
             }
         });
-    }
+    };
+    this.renderEvent= function(eventObj){
+        var event = $('<div>');
+        event.addClass("event");
+        event.append('<div class="event-draw">'+eventObj.title+'</div>');
+        var mstart =moment(eventObj.start);
+        var mend =moment(eventObj.end);
+        var event_cel_height=self.get('celHeight');
+        var event_cel_interval=self.get('celInterval');
+        var duration_min = mend.diff(mstart,"minutes");
+        var eventHeigth = parseInt(duration_min*event_cel_height/event_cel_interval);
+        event.height(eventHeigth);
+        return event;
+    };
     var init=function(){
         self.render();
         self.getEvents();
