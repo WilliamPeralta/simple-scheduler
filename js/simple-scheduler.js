@@ -15,6 +15,8 @@ var sScheduler = function(selector,options){
         celHeight:50,// px,
         labelsWidth:80,// px,
         draggable:true,
+        titlesKeyName:'key',
+        titlesLabelName:'title',
         onDrop:function(){},
         dropClass:"sscheduler-droppable",
         dropHoverClass:"sscheduler-hover-droppable",
@@ -56,7 +58,7 @@ var sScheduler = function(selector,options){
         var html = '<thead><tr>';
         html += '<th style="width:'+self.get('labelsWidth')+'px"><input type="text" class="sscheduler-datepicker" value="'+self.currentDay.format(dateFormat)+'"></th>';
         $.each(self.get('titles'),function(k,v){
-            html += '<th>'+ v.title+'</th>';
+            html += '<th>'+ v[self.get('titlesLabelName')]+'</th>';
         });
         html += '</tr></thead>';
         return html;
@@ -97,7 +99,7 @@ var sScheduler = function(selector,options){
             $.each(self.get('titles'),function(k,v){
                 var celevent = $('<td>');
                 celevent.addClass(event_td_classes.join(" "));
-                celevent.attr('data-key',v.key);
+                celevent.attr('data-key',v[self.get('titlesKeyName')]);
                 celevent.data('from',interval.from.format(dateTimeFormat));
                 celevent.data('to',interval.to.format(dateTimeFormat));
 

@@ -37,6 +37,8 @@
         onDrop:function(){
             alert("evento cambiato");
         },
+        titlesKeyName:'key',
+        titlesLabelName:'title',
         keyName:'id_utente',
         source:function(request,callback){
             $.get("data.json",request,callback,"json");
