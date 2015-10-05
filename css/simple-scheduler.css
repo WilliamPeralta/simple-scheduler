@@ -29,12 +29,13 @@
     -padding: 5px;
 }
 .sscheduler .event-draw{
-    padding: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     text-transform: uppercase;
     letter-spacing: -.2px;
+    padding: 2px;
+    line-height: 1;
 }
 
 .sscheduler-droppable{
