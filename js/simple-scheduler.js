@@ -11,8 +11,9 @@ var sScheduler = function(selector,options){
         startDate:null,//"2015-09-21",
         keyName:'id',
         source:function(request,callback){ }, //ajax to get events collection
-        celInterval:50, // minutes
-        celHeight:50,// px,
+        slotInterval:50, // minutes
+        slotHeight:50,// px,
+        slotWidth:'auto',// px,
         labelsWidth:80,// px,
         draggable:true,
         titlesKeyName:'key',
@@ -44,8 +45,16 @@ var sScheduler = function(selector,options){
     this.get=function(key){
         return settings[key];
     };
-    this.render = function(){
+    this.getAutoWidth =  function(){
+        return parseInt(($(selector).width()-self.get("labelsWidth"))/self.get('titles').length)
+    };
+    this.render = function() {
         var table = $('<table class="table table-striped sscheduler table-bordered">');
+        if (self.get("slotWidth") != "auto"){
+            table.width("auto");
+        }else{
+           self.set("slotWidth",(self.getAutoWidth()));
+        }
         table.append(renderTitles());
         table.append(renderBody());
         $(selector).html(table);
@@ -57,9 +66,9 @@ var sScheduler = function(selector,options){
     };
     var renderTitles = function(){
         var html = '<thead><tr>';
-        html += '<th style="width:'+self.get('labelsWidth')+'px"><input type="text" class="sscheduler-datepicker" value="'+self.currentDay.format(dateFormat)+'"></th>';
+        html += '<th ><input type="text" class="sscheduler-datepicker" value="'+self.currentDay.format(dateFormat)+'"></th>';
         $.each(self.get('titles'),function(k,v){
-            html += '<th>'+ v[self.get('titlesLabelName')]+'</th>';
+            html += '<th style="width:'+self.get('slotWidth')+'px" class="scheduler-titles" >'+ v[self.get('titlesLabelName')]+'</th>';
         });
         html += '</tr></thead>';
         return html;
@@ -73,7 +82,7 @@ var sScheduler = function(selector,options){
             var settings=$.extend({
                 eventClass:"",
                 class:"",
-                celHeight:0,
+                slotHeight:0,
                 disabled:false,
             },interval.data||{});
             //intervals labels
@@ -92,9 +101,9 @@ var sScheduler = function(selector,options){
             if(settings.disabled){
                 event_cel_classes.push('interval-disabled');
             }
-            var event_cel_height=self.get('celHeight');
-            if(settings.celHeight>0){
-                event_cel_height =settings.celHeight;
+            var event_cel_height=self.get('slotHeight');
+            if(settings.slotHeight>0){
+                event_cel_height =settings.slotHeight;
             }
 
             $.each(self.get('titles'),function(k,v){
@@ -130,9 +139,9 @@ var sScheduler = function(selector,options){
         var intervals = [];
         $.each(self.get('orari'),function(k,v){
             var settings=$.extend({
-                celInterval:0
+                slotInterval:0
             },v||{});
-            var minutesInterval = v.celInterval>0?v.celInterval:self.get('celInterval');
+            var minutesInterval = v.slotInterval>0?v.slotInterval:self.get('slotInterval');
             for (var start = moment(v.from,"HH:mm");start.isBefore(moment(v.to,"HH:mm"));start.add(minutesInterval,'minutes')){
 
 
@@ -167,8 +176,14 @@ var sScheduler = function(selector,options){
      */
     this.bindEvents = function(){
         if(self.get("draggable")) {
+            console.log(self.get('slotWidth'));
             $(".event").draggable({
-                revert: 'invalid'
+                revert: 'invalid',
+                opacity: 0.7,
+                helper:function( event ) {
+                    return $(event.currentTarget).clone().height(self.get("slotHeight"));
+                },
+                grid:[self.get('slotWidth'),self.get('slotHeight')]
             });
             $(".event-cel:not(.interval-disabled)").droppable({
                 accept: function(e){
@@ -221,8 +236,8 @@ var sScheduler = function(selector,options){
         event.append('<div class="event-time-label">'+mstart.format("HH:mm")+' - '+mend.format("HH:mm")+'</div>');
         event.append('<div class="event-draw">'+eventObj.title+'</div>');
 
-        var event_cel_height=self.get('celHeight');
-        var event_cel_interval=self.get('celInterval');
+        var event_cel_height=self.get('slotHeight');
+        var event_cel_interval=self.get('slotInterval');
         var duration_min = mend.diff(mstart,"minutes");
         var eventHeigth = parseInt(duration_min*event_cel_height/event_cel_interval);
         event.height(eventHeigth);

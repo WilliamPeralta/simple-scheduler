@@ -66,3 +66,10 @@ input.sscheduler-datepicker{
     font-size: 11px;
     color: #f9f9f9;
 }
+
+.sscheduler .scheduler-titles{
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

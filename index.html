@@ -15,7 +15,7 @@
 
 <body>
 
-<div id="calendar">
+<div id="calendar"  >
 </div>
 <script>
     scheduler = new sScheduler("#calendar",{
@@ -39,17 +39,18 @@
         titlesLabelName:'title',
         keyName:'id_utente',
         onDrop:function(){
-            alert("evento cambiato");
+            console.log("evento cambiato");
         },
         source:function(request,callback){
              //ajax to get events collection
             $.get("data.json",request,callback,"json");
         },
-        celInterval:50, // minutes
-        celHeight:40, // px
+        slotInterval:50, // minutes
+        slotHeight:40, // px
+        //slotWidth:100, // px
         orari:[
             {from:"08:00",to:"13:00"},
-            {from:"13:00",to:"14:00",disabled:true,class:"pausa-pranzo",celInterval:60,celHeight:100},
+            {from:"13:00",to:"14:00",disabled:true,class:"pausa-pranzo",slotHeight:80,slotInterval:100},
             {from:"14:00",to:"22:00"}
         ]
     });
