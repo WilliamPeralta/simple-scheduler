@@ -14,7 +14,8 @@
     left: 0px;
     width: 100%;
     z-index: 2;
-    border: 1px solid #f9f9f9;
+    border-radius: 3px;
+    border: 1px solid #151aad;
 
 }
 .sscheduler tbody > tr > td{
