@@ -17,6 +17,7 @@ var sScheduler = function(selector,options){
         draggable:true,
         titlesKeyName:'key',
         titlesLabelName:'title',
+        eventRender:function(event,element){},
         onDrop:function(){},
         dropClass:"sscheduler-droppable",
         dropHoverClass:"sscheduler-hover-droppable",
@@ -225,6 +226,7 @@ var sScheduler = function(selector,options){
         var duration_min = mend.diff(mstart,"minutes");
         var eventHeigth = parseInt(duration_min*event_cel_height/event_cel_interval);
         event.height(eventHeigth);
+        self.get("eventRender")(eventObj,event);
         return event;
     };
     var init=function(){
