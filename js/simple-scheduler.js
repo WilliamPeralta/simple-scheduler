@@ -182,8 +182,8 @@ var sScheduler = function(selector,options){
                 opacity: 0.7,
                 helper:function( event ) {
                     return $(event.currentTarget).clone().height(self.get("slotHeight"));
-                },
-                grid:[self.get('slotWidth'),self.get('slotHeight')]
+                }//,
+                //grid:[self.get('slotWidth'),self.get('slotHeight')]
             });
             $(".event-cel:not(.interval-disabled)").droppable({
                 accept: function(e){
