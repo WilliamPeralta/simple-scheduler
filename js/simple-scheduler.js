@@ -18,7 +18,7 @@ var sScheduler = function(selector,options){
         titlesKeyName:'key',
         titlesLabelName:'title',
         eventRender:function(event,element){},
-        onDrop:function(){},
+        onDrop:function(event,mstart){},
         dropClass:"sscheduler-droppable",
         dropHoverClass:"sscheduler-hover-droppable",
         orari:[
@@ -194,7 +194,7 @@ var sScheduler = function(selector,options){
                     //move event to new container
                     $(this).html(ui.draggable);
                     $(ui.draggable).css({top: 0, left: 0});
-                    self.get("onDrop")();
+                    self.get("onDrop")({},{});
                 }
             });
         }
