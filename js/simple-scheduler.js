@@ -13,7 +13,6 @@ var sScheduler = function(selector,options){
         source:function(request,callback){ }, //ajax to get events collection
         slotInterval:50, // minutes
         slotHeight:50,// px,
-        slotWidth:'auto',// px,
         labelsWidth:80,// px,
         draggable:true,
         titlesKeyName:'key',
@@ -45,16 +44,8 @@ var sScheduler = function(selector,options){
     this.get=function(key){
         return settings[key];
     };
-    this.getAutoWidth =  function(){
-        return parseInt(($(selector).width()-self.get("labelsWidth"))/self.get('titles').length)
-    };
     this.render = function() {
         var table = $('<table class="table table-striped sscheduler table-bordered">');
-        if (self.get("slotWidth") != "auto"){
-            table.width("auto");
-        }else{
-           self.set("slotWidth",(self.getAutoWidth()));
-        }
         table.append(renderTitles());
         table.append(renderBody());
         $(selector).html(table);
@@ -68,7 +59,7 @@ var sScheduler = function(selector,options){
         var html = '<thead><tr>';
         html += '<th ><input type="text" class="sscheduler-datepicker" value="'+self.currentDay.format(dateFormat)+'"></th>';
         $.each(self.get('titles'),function(k,v){
-            html += '<th style="width:'+self.get('slotWidth')+'px" class="scheduler-titles" >'+ v[self.get('titlesLabelName')]+'</th>';
+            html += '<th  class="scheduler-titles" >'+ v[self.get('titlesLabelName')]+'</th>';
         });
         html += '</tr></thead>';
         return html;
@@ -176,14 +167,12 @@ var sScheduler = function(selector,options){
      */
     this.bindEvents = function(){
         if(self.get("draggable")) {
-            console.log(self.get('slotWidth'));
             $(".event").draggable({
                 revert: 'invalid',
                 opacity: 0.7,
                 helper:function( event ) {
                     return $(event.currentTarget).clone().height(self.get("slotHeight"));
                 }//,
-                //grid:[self.get('slotWidth'),self.get('slotHeight')]
             });
             $(".event-cel:not(.interval-disabled)").droppable({
                 accept: function(e){
