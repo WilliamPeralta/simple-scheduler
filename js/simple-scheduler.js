@@ -57,7 +57,7 @@ var sScheduler = function(selector,options){
     };
     var renderTitles = function(){
         var html = '<thead><tr>';
-        html += '<th ><input type="text" class="sscheduler-datepicker" value="'+self.currentDay.format(dateFormat)+'"></th>';
+        html += '<th style="width:'+self.get('labelsWidth')+'px"><input type="text" class="sscheduler-datepicker" value="'+self.currentDay.format(dateFormat)+'"></th>';
         $.each(self.get('titles'),function(k,v){
             html += '<th  class="scheduler-titles" >'+ v[self.get('titlesLabelName')]+'</th>';
         });

@@ -33,6 +33,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-transform: uppercase;
+    letter-spacing: -.2px;
 }
 
 .sscheduler-droppable{
