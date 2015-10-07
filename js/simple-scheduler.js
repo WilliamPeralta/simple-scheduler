@@ -76,11 +76,13 @@ var sScheduler = function(selector,options){
         });
     };
     this.selectInterval= function(e){
+
         var container = $(selector);
         var $this = $(this);
         var items_selected = container.find('.event-selected');
         //pulisco
-        if (e.type === 'mousedown') {
+        //console.log(e.target);
+        if (e.type === 'mousedown'||!($(e.target).hasClass('event-cel')||$(e.target).hasClass('event-container'))){
             items_selected.removeClass('event-selected');
             return;
         }
@@ -220,6 +222,9 @@ var sScheduler = function(selector,options){
             $(".event").draggable({
                 revert: 'invalid',
                 opacity: 0.7,
+                drag:function(e) {
+
+                },
                 helper:function( event ) {
                     return $(event.currentTarget).clone().height(self.get("slotHeight"));
                 }//,
