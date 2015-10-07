@@ -38,8 +38,8 @@
         titlesKeyName:'key',
         titlesLabelName:'title',
         keyName:'id_utente',
-        onDrop:function(){
-            console.log("evento cambiato");
+        onDrop:function(event,element){
+            console.log(element.data());
         },
         select:function(e,elements){
             console.log(elements.first());
