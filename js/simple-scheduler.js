@@ -20,7 +20,7 @@ var sScheduler = function(selector,options){
         titlesKeyName:'key',
         titlesLabelName:'title',
         eventRender:function(event,element){},
-        onDrop:function(event,element){},
+        onDrop:function(event,slotElement,eventElement){},
         dropClass:"sscheduler-droppable",
         dropHoverClass:"sscheduler-hover-droppable",
         orari:[
@@ -253,7 +253,7 @@ var sScheduler = function(selector,options){
                     var $this = $(this);
                     $this.html(ui.draggable);
                     $(ui.draggable).css({top: 0, left: 0});
-                    self.get("onDrop")(event,$this.parent());
+                    self.get("onDrop")(event,$this.parent(),ui.draggable);
                 }
             });
         }
@@ -280,6 +280,7 @@ var sScheduler = function(selector,options){
         var mend =moment(eventObj.end);
 
         var event = $('<div>');
+        event.data('event',eventObj);
         event.addClass("event");
         event.append('<div class="event-time-label">'+mstart.format("HH:mm")+' - '+mend.format("HH:mm")+'</div>');
         event.append('<div class="event-draw">'+eventObj.title+'</div>');

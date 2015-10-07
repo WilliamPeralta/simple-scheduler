@@ -38,8 +38,9 @@
         titlesKeyName:'key',
         titlesLabelName:'title',
         keyName:'id_utente',
-        onDrop:function(event,element){
-            console.log(element.data());
+        onDrop:function(event,slotElement,eventElement){
+            console.log(slotElement.data());
+            console.log(eventElement.data('event'));
         },
         select:function(e,elements){
             console.log(elements.first());
