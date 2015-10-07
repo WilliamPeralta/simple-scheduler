@@ -91,6 +91,6 @@ input.sscheduler-datepicker{
     text-overflow: ellipsis;
 }
 
-.sscheduler .event-selected{
+.sscheduler td.event-selected{
     background-color: rgba(6, 80, 175, 0.17) !important;
 }
