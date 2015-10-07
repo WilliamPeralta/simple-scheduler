@@ -14,6 +14,8 @@ var sScheduler = function(selector,options){
         slotInterval:50, // minutes
         slotHeight:50,// px,
         labelsWidth:80,// px,
+        select:function(jqEvent,elements){},
+        slotDisabledError:function(){},
         draggable:true,
         titlesKeyName:'key',
         titlesLabelName:'title',
@@ -48,12 +50,60 @@ var sScheduler = function(selector,options){
         var table = $('<table class="table table-striped sscheduler table-bordered">');
         table.append(renderTitles());
         table.append(renderBody());
-        $(selector).html(table);
+        var container = $(selector);
+        container.html(table);
         $( ".sscheduler-datepicker" ).datepicker({
             dateFormat:"yy-mm-dd"
         }).on("change",function(){
             self.setDate($(this).val());
         });
+        //$(".event-container",container).on('click',self.selectInterval);
+        var eventsContainers =$(".event-container",container);
+        eventsContainers.on('mousedown', function (evt) {
+            self.selectInterval.call(this,evt);
+            eventsContainers.on('mouseup mousemove', function handler(evt) {
+                console.log(evt.type);
+                if (evt.type === 'mouseup') {
+                    // click
+                    self.selectInterval.call(this,evt);
+                    eventsContainers.off('mouseup mousemove', handler);
+                } else {
+                    // drag
+                    self.selectInterval.call(this,evt);
+                }
+
+            });
+        });
+    };
+    this.selectInterval= function(e){
+        var container = $(selector);
+        var $this = $(this);
+        var items_selected = container.find('.event-selected');
+        //pulisco
+        if (e.type === 'mousedown') {
+            items_selected.removeClass('event-selected');
+            return;
+        }
+        //controllo che non sia disabilitato
+        if($this.find(".interval-disabled").length>0){
+            items_selected.removeClass('event-selected');
+            self.get("slotDisabledError")();
+            return;
+        }
+
+        //tolgo i select k non hanno la stessa key
+        items_selected.not('[data-key='+$this.data('key')+']').removeClass('event-selected');
+        //tolgo se il secondo elemento non è precedente o succesivo
+
+
+        $(this).addClass('event-selected');
+
+        //pulisco
+        if (e.type === 'mouseup') {
+            console.log("onIntervalSelected");
+            items_selected = container.find('.event-selected');
+            self.get("select")(e,items_selected);
+        }
     };
     var renderTitles = function(){
         var html = '<thead><tr>';

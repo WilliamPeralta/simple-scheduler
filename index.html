@@ -41,6 +41,14 @@
         onDrop:function(){
             console.log("evento cambiato");
         },
+        select:function(e,elements){
+            console.log(elements.first());
+            console.log(elements.last());
+            console.log(elements.last().data());
+        },
+        slotDisabledError:function(){
+            console.log("slot Disabilitato");
+        },
         source:function(request,callback){
              //ajax to get events collection
             $.get("data.json",request,callback,"json");
