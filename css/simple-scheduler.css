@@ -92,5 +92,5 @@ input.sscheduler-datepicker{
 }
 
 .sscheduler .event-selected{
-    background-color: rgba(6, 80, 175, 0.17);
+    background-color: rgba(6, 80, 175, 0.17) !important;
 }
