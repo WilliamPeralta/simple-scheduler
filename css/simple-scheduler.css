@@ -57,7 +57,11 @@
     background-color: #d0e9df;
 }
 
-tr.pausa-pranzo{
+
+.sscheduler div.interval-disabled{
+    background: #ffe5df;
+}
+.sscheduler tr.pausa-pranzo{
     background:repeating-linear-gradient(
             45deg,
             #fff,
@@ -66,8 +70,11 @@ tr.pausa-pranzo{
             #f8f8f8 20px
     ) !important;
 }
-.pausa-pranzo td{
-    border: 0px !important;
+.sscheduler tr.pausa-pranzo div.interval-disabled{
+    background:none !important;
+}
+.sscheduler tbody > tr.pausa-pranzo > td{
+    border: none !important;
     background:none !important;
 }
 input.sscheduler-datepicker{

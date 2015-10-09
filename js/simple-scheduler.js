@@ -1,6 +1,7 @@
 "use strict";
 var sScheduler = function(selector,options){
     var self = this;
+    this.slotMoments = [];
     var dateTimeFormat = "YYYY-MM-DD HH:mm";
     var dateFormat = "YYYY-MM-DD";
     /**
@@ -152,6 +153,7 @@ var sScheduler = function(selector,options){
             $.each(self.get('titles'),function(k,v){
                 var celevent = $('<td>');
                 celevent.addClass(event_td_classes.join(" "));
+                celevent.addClass(intervals[i].from.format("YYYYMMDDHHmm"));
                 celevent.attr('data-key',v[self.get('titlesKeyName')]);
                 celevent.data('from',interval.from.format(dateTimeFormat));
                 celevent.data('to',interval.to.format(dateTimeFormat));
@@ -183,27 +185,32 @@ var sScheduler = function(selector,options){
      */
     this.getIntervals=function(){
         var intervals = [];
-        $.each(self.get('orari'),function(k,v){
-            var settings=$.extend({
-                slotInterval:0
-            },v||{});
+        self.slotMoments = [];
+        //per ogni orario
+        for(var i=0;i<self.get('orari').length;i++){
+            var v = self.get('orari')[i];
             var minutesInterval = v.slotInterval>0?v.slotInterval:self.get('slotInterval');
+
             for (var start = moment(v.from,"HH:mm");start.isBefore(moment(v.to,"HH:mm"));start.add(minutesInterval,'minutes')){
 
-
-                console.log("minutes:"+minutesInterval);
                 var from = moment(start);
                 var to = moment(start).add(minutesInterval,'minutes');
-                console.log(from.format("HH:mm")+" "+to.format("HH:mm"));
+                self.addIntervalMoment(from,to);
+
                 intervals.push({
                     from:from.set({year:self.currentDay.get("year"),month:self.currentDay.get("month"),date:self.currentDay.get("date")}),
                     to:to.set({year:self.currentDay.get("year"),month:self.currentDay.get("month"),date:self.currentDay.get("date")}),
                     data:v
                 });
             }
-        });
+
+        }
         return intervals;
     };
+    this.addIntervalMoment=function(startmoment,endmoment){
+        self.slotMoments.push([startmoment,endmoment]);
+    };
+
     /**
      * get remote events as json object
      */
@@ -211,8 +218,11 @@ var sScheduler = function(selector,options){
         var request = {from:self.currentDay.format(dateFormat),to:self.currentDay.format(dateFormat)};
         self.get('source')(request,function(events){
             //console.log(events);
-            for(var i=0;i<events.length;i++){
-                addEvent(events[i]);
+            for(var i=0;i<events.disabled.length;i++){
+                self.disableIntervals((events.disabled[i]));
+            }
+            for( i=0;i<events.events.length;i++){
+                addEvent(events.events[i]);
             }
             self.bindEvents();
         });
@@ -258,6 +268,17 @@ var sScheduler = function(selector,options){
             });
         }
     };
+    this.disableIntervals=function(disabled){
+        var classes = self.getSlotsClassesInInterval(moment(disabled.start,"YYYY-MM-DD HH:mm:ss"),moment(disabled.end,"YYYY-MM-DD HH:mm:ss"));
+        for(var i=0;i<classes.length;i++){
+            classes[i]="."+classes[i];
+        }
+        var container = $(selector);
+        var slotsByKey = $("td[data-key="+disabled[self.get('keyName')]+"]",container);
+        var slots = slotsByKey.filter(classes.join(", "));
+        slots.addClass('slot-diabled');
+        slots.find(".event-cel").addClass("interval-disabled");
+    };
     var addEvent = function(event){
         //prendo tutti td con la key del evento
         var elementsKey = $(".event-container[data-key="+event[self.get('keyName')]+"]");
@@ -271,7 +292,7 @@ var sScheduler = function(selector,options){
                 $this.find(".event-cel").html(self.renderEvent(event));
                 return false;
             }else{
-                console.log(mstart.format(dateTimeFormat)+" "+mfrom.format(dateTimeFormat));
+                //console.log(mstart.format(dateTimeFormat)+" "+mfrom.format(dateTimeFormat));
             }
         });
     };
@@ -296,6 +317,38 @@ var sScheduler = function(selector,options){
     var init=function(){
         self.render();
         self.getEvents();
-    }
+    };
+    /**
+     * torna un array di classi per riconoscere tutti gli slot non compressi dentro un intervalo
+     * @param mstart
+     * @param mend
+     */
+    this.getSlotsClassesNotInInterval= function(mstart,mend){
+        var classes = [];
+        for(var i=0;i<self.slotMoments.length;i++){
+            //console.log(self.slotMoments[i][0].format('HHmm')+"e is before "+mend.format('HHmm')+"n and "+self.slotMoments[i][1].format('HHmm')+"e is after "+mstart.format('HHmm')+"n");
+            if(!(self.slotMoments[i][0].isBefore(mend)&&self.slotMoments[i][1].isAfter(mstart))){
+                //console.log(self.slotMoments[i][0].format('YYYYMMDDHHmm'));
+                classes.push(self.slotMoments[i][0].format('YYYYMMDDHHmm'));
+            }
+        }
+        return classes;
+    };
+    /**
+     * torna un array di classi per riconoscere tutti gli slot non compressi dentro un intervalo
+     * @param mstart
+     * @param mend
+     */
+    this.getSlotsClassesInInterval= function(mstart,mend){
+        var classes = [];
+        for(var i=0;i<self.slotMoments.length;i++){
+            //console.log(self.slotMoments[i][0].format('HHmm')+"e is before "+mend.format('HHmm')+"n and "+self.slotMoments[i][1].format('HHmm')+"e is after "+mstart.format('HHmm')+"n");
+            if((self.slotMoments[i][0].isBefore(mend)&&self.slotMoments[i][1].isAfter(mstart))){
+                //console.log(self.slotMoments[i][0].format('YYYYMMDDHHmm'));
+                classes.push(self.slotMoments[i][0].format('YYYYMMDDHHmm'));
+            }
+        }
+        return classes;
+    };
     init();
 };
