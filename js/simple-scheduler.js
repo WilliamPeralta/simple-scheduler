@@ -211,20 +211,34 @@ var sScheduler = function(selector,options){
         self.slotMoments.push([startmoment,endmoment]);
     };
 
+    this.applyOrari= function(orari){
+        for(var i=0;i<orari.length;i++){
+            self.enableIntervals(orari[i]);
+        }
+    };
+    this.enableIntervals= function(orario){
+        var classes = self.getSlotsClassesInInterval(moment(orario.start,"YYYY-MM-DD HH:mm:ss"),moment(orario.end,"YYYY-MM-DD HH:mm:ss"));
+        for(var i=0;i<classes.length;i++){
+            classes[i]="."+classes[i];
+        }
+        var container = $(selector);
+        var slotsByKey = $("td[data-key="+orario[self.get('keyName')]+"]",container);
+        var slots = slotsByKey.filter(classes.join(", "));
+        slots.find(".event-cel").removeClass("interval-disabled");
+    };
+
     /**
      * get remote events as json object
      */
     this.getEvents = function(){
         var request = {from:self.currentDay.format(dateFormat),to:self.currentDay.format(dateFormat)};
         self.get('source')(request,function(events){
-            //console.log(events);
-            for(var i=0;i<events.disabled.length;i++){
-                self.disableIntervals((events.disabled[i]));
-            }
-            for( i=0;i<events.events.length;i++){
+
+            self.applyOrari(events.orari);
+            for(var i=0;i<events.events.length;i++){
                 addEvent(events.events[i]);
             }
-            self.bindEvents();
+            self.bindEvents(events.disabled,events.orari);
         });
     };
     /**

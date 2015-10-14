@@ -17,6 +17,7 @@
     z-index: 2;
     border-radius: 5px;
     border: 1px solid #151aad;
+    cursor: move;
 
 }
 .sscheduler tbody{
@@ -60,6 +61,7 @@
 
 .sscheduler div.interval-disabled{
     background: #ffe5df;
+    cursor: not-allowed;
 }
 .sscheduler tr.pausa-pranzo{
     background:repeating-linear-gradient(
