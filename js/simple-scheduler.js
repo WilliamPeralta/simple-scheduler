@@ -16,6 +16,7 @@ var sScheduler = function(selector,options){
         slotHeight:50,// px,
         labelsWidth:80,// px,
         select:function(jqEvent,elements){},
+        titleRender:null, //function(titleObj){},
         slotDisabledError:function(){},
         draggable:true,
         titlesKeyName:'key',
@@ -112,7 +113,11 @@ var sScheduler = function(selector,options){
         var html = '<thead><tr>';
         html += '<th style="width:'+self.get('labelsWidth')+'px"><input type="text" class="sscheduler-datepicker" value="'+self.currentDay.format(dateFormat)+'"></th>';
         $.each(self.get('titles'),function(k,v){
-            html += '<th  class="scheduler-titles" >'+ v[self.get('titlesLabelName')]+'</th>';
+            var content =  v[self.get('titlesLabelName')];
+            if(self.get('titleRender')!=null){
+                content = self.get('titleRender')(v);
+            }
+            html += '<th  class="scheduler-titles" >'+content+'</th>';
         });
         html += '</tr></thead>';
         return html;
@@ -127,7 +132,7 @@ var sScheduler = function(selector,options){
                 eventClass:"",
                 class:"",
                 slotHeight:0,
-                disabled:false,
+                disabled:false
             },interval.data||{});
             //intervals labels
             var row =  $('<tr>');

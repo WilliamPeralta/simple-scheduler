@@ -96,7 +96,7 @@ input.sscheduler-datepicker{
 .sscheduler .scheduler-titles{
     box-sizing: border-box;
     white-space: nowrap;
-    overflow: hidden;
+    overflow: visible;
     text-overflow: ellipsis;
 }
 

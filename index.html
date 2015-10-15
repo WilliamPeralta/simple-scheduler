@@ -54,6 +54,21 @@
              //ajax to get events collection
             $.get("data.json",request,callback,"json");
         },
+        titleRender:function(titleObj){
+            var menu = '<div class="pull-left">'+titleObj.title+'</div>\
+            <div class="dropdown pull-right">\
+                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">\
+                    <span class="caret"></span>\
+            </button>\
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">\
+            <li><a href="#">Action</a></li>\
+            <li><a href="#">Another action</a></li>\
+            <li><a href="#">Something else here</a></li>\
+            <li><a href="#">Separated link</a></li>\
+            </ul>\
+            </div>';
+            return menu;
+        },
         labelsWidth:100,
         slotInterval:50, // minutes
         slotHeight:40, // px
@@ -61,10 +76,11 @@
         orari:[
             {from:"08:00",to:"13:00",disabled:true},
             {from:"13:00",to:"14:00",disabled:true,class:"pausa-pranzo",slotHeight:80,slotInterval:100},
-            {from:"14:00",to:"22:00",disabled:false}
+            {from:"14:00",to:"22:00",disabled:true}
         ]
     });
 
 </script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </body>
 </html>
