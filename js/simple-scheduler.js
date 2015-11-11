@@ -54,11 +54,6 @@ var sScheduler = function(selector,options){
         table.append(renderBody());
         var container = $(selector);
         container.html(table);
-        $( ".sscheduler-datepicker" ).datepicker({
-            dateFormat:"yy-mm-dd"
-        }).on("change",function(){
-            self.setDate($(this).val());
-        });
         //$(".event-container",container).on('click',self.selectInterval);
         var eventsContainers =$(".event-container",container);
         eventsContainers.on('mousedown', function (evt) {
