@@ -172,7 +172,7 @@ var sScheduler = function(selector,options){
     };
     this.setDate = function(date){
         console.log(date);
-        this.currentDay = moment(date,dateFormat);
+        this.currentDay = moment.isMoment(date)?date:moment(date,dateFormat);
         self.refresh();
     };
     this.refresh = function(date){
