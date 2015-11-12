@@ -315,6 +315,9 @@ var sScheduler = function(selector,options){
         var mend =moment(eventObj.end);
 
         var event = $('<div>');
+        if(typeof eventObj.color !== "undefined"){
+            event.css('background-color',eventObj.color);
+        }
         event.data('event',eventObj);
         event.addClass("event");
         event.append('<div class="event-time-label">'+mstart.format("HH:mm")+' - '+mend.format("HH:mm")+'</div>');
