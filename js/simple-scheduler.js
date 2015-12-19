@@ -175,6 +175,9 @@ var sScheduler = function(selector,options){
         this.currentDay = moment.isMoment(date)?date:moment(date,dateFormat);
         self.refresh();
     };
+    this.getDate = function(){
+        return this.currentDay ;
+    };
     this.refresh = function(date){
         self.render();
         self.getEvents();
