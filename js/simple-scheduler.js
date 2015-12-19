@@ -112,7 +112,7 @@ var sScheduler = function(selector,options){
             if(self.get('titleRender')!=null){
                 content = self.get('titleRender')(v);
             }
-            html += '<th  class="scheduler-titles" >'+content+'</th>';
+            html += '<th  class="scheduler-titles" data-key="'+v[self.get('titlesKeyName')]+'" >'+content+'</th>';
         });
         html += '</tr></thead>';
         return html;
